@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Michael Simon
+ * Copyright 2018 Michael Simon, Jordan Dohms
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package edu.kit.scc.linotp;
+package ca.ab.concordia.privacyIDEAtfa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +24,12 @@ import javax.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LinotpUserDecoder {
+public class piUserDecoder {
 
-	private static Logger logger = LoggerFactory.getLogger(LinotpUserDecoder.class);
+	private static Logger logger = LoggerFactory.getLogger(piUserDecoder.class);
 	
-	public LinotpUser decode(JsonObject object) {
-		LinotpUser user = new LinotpUser();
+	public piUser decode(JsonObject object) {
+		piUser user = new piUser();
 		user.setUserId(JsonHelper.getStringOrNull(object, "userid"));
 		user.setUserName(JsonHelper.getStringOrNull(object, "username"));
 		user.setSurName(JsonHelper.getStringOrNull(object, "surname"));
@@ -40,7 +40,7 @@ public class LinotpUserDecoder {
 		return user;
 	}
 	
-	public List<LinotpUser> decodeUserList(JsonObject object) {
+	public List<piUser> decodeUserList(JsonObject object) {
         JsonObject result = object.getJsonObject("result");
         
         Boolean status = result.getBoolean("status", false);
@@ -48,7 +48,7 @@ public class LinotpUserDecoder {
         if (logger.isDebugEnabled())
 	    	logger.debug("LinOTP Session status {} and value {}", status);
 
-    	List<LinotpUser> userList = new ArrayList<LinotpUser>();
+    	List<piUser> userList = new ArrayList<piUser>();
 
     	if (status && result.containsKey("value") && result.containsKey("value")) {
         	
@@ -60,7 +60,7 @@ public class LinotpUserDecoder {
 
     	        JsonObject jo = data.getJsonObject(i);
         		
-    	        LinotpUser user = decode(jo);
+    	        piUser user = decode(jo);
         		
     	        userList.add(user);
         	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Michael Simon
+ * Copyright 2018 Michael Simon, Jordan Dohms
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
@@ -13,10 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package edu.kit.scc.linotp;
+package ca.ab.concordia.privacyIDEAtfa;
 
 import java.util.List;
-
 import org.opensaml.messaging.context.BaseContext;
 
 public class TokenContext extends BaseContext {
@@ -27,7 +26,7 @@ public class TokenContext extends BaseContext {
 	private String message;
 	private String username;
 	
-	private List<LinotpTokenInfo> tokenList;
+	private List<piTokenInfo> tokenList;
 	
 	public String getToken() {
 		return token;
@@ -69,11 +68,11 @@ public class TokenContext extends BaseContext {
 		this.username = username;
 	}
 
-	public List<LinotpTokenInfo> getTokenList() {
+	public List<piTokenInfo> getTokenList() {
 		return tokenList;
 	}
 
-	public void setTokenList(List<LinotpTokenInfo> tokenList) {
+	public void setTokenList(List<piTokenInfo> tokenList) {
 		this.tokenList = tokenList;
 	}
 }

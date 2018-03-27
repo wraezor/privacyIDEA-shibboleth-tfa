@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Michael Simon
+ * Copyright 2018 Michael Simon, Jordan Dohms
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package edu.kit.scc.linotp;
+package ca.ab.concordia.privacyIDEAtfa;
 
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;

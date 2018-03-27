@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Michael Simon
+ * Copyright 2018 Michael Simon, Jordan Dohms
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package edu.kit.scc.linotp;
+/*package ca.ab.concordia.privacyIDEAtfa;
 
 import java.util.List;
 
@@ -98,12 +98,12 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
     	logger.debug("Entering GenerateNewToken doExecute");
 			
 		try {
-			LinotpConnection connection = new LinotpConnection(host, serviceUsername, servicePassword, checkCert);
-			connection.requestAdminSession();
-			List<LinotpTokenInfo> tokenList = connection.getTokenInfoList(username);
+			piConnection connection = new piConnection(host, checkCert);
+			//connection.requestAdminSession();
+			List<piTokenInfo> tokenList = connection.getTokenInfoList(username);
 			
 			if (createEmailToken && tokenList.size() == 0) {
-				List<LinotpUser> userList = connection.getUserList("userid", username);
+				List<piUser> userList = connection.getUserList("userid", username);
 				if (userList.size() == 1) {
 					connection.initEmailToken(username, userList.get(0).getEmail());
 					tokenList = connection.getTokenInfoList(username);
@@ -112,7 +112,7 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 			
 			tokenCtx.setTokenList(tokenList);
 			
-			connection.generateToken(tokenCtx);
+			//connection.generateToken(tokenCtx);
 			
 		} catch (Exception e) {
 			logger.debug("Failed to create new token", e);
@@ -146,3 +146,4 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 	}
 
 }
+*/
