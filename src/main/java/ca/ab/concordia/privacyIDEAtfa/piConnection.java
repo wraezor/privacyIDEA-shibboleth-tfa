@@ -60,7 +60,7 @@ public class piConnection {
 
   private final Logger          logger = LoggerFactory.getLogger(piConnection.class);
   protected piTokenInfoDecoder  tokenDecoder;
-  protected piUserDecoder       userDecoder;
+  //protected piUserDecoder       userDecoder;
   protected CloseableHttpClient httpClient;
   //protected HttpClientContext   httpContext;
   protected String              piServer;
@@ -74,7 +74,7 @@ public class piConnection {
     //httpContext   = getHttpContext("admin", "blah");
     
     tokenDecoder  = new piTokenInfoDecoder();
-    userDecoder   = new piUserDecoder();
+    //userDecoder   = new piUserDecoder();
     
     System.out.println("Connection created");
     logger.debug("Connection created");
@@ -94,6 +94,7 @@ public class piConnection {
           .setHost(piServer)
           .setPath(path);
 
+      // Add GET/POST variables to HTTP call.
       for (Map.Entry<String, String> param : parameters.entrySet()) {
          //System.out.print("Key is: "+ param.getKey() + " & Value is: ");
          //System.out.println(param.getValue());
@@ -184,11 +185,9 @@ public class piConnection {
     return false;
   }
 
-  // Validate existing token
-  //public boolean validateToken(TokenContext tokenCtx) throws piSessionException {
-  //  logger.debug("Trying to validate token for {}", tokenCtx.getUsername());
+  // Validate existing token by supplying serial number and token (tests token only, not PIN/password)
   public boolean validateTokenBySerial(String serial, String token) throws piSessionException {
-    logger.debug("Trying to validate token for user");
+    logger.debug("Trying to validate token by serial");
     
     try {
       HashMap<String, String> callParameters = new HashMap<String, String>();
@@ -219,7 +218,40 @@ public class piConnection {
     
     return false;
   }
+
+  // Validate existing token by supplying username and password/token value
+  public boolean validateTokenByUser(String user, String token) throws piSessionException {
+    logger.debug("Trying to validate token by user");
+    
+    try {
+      HashMap<String, String> callParameters = new HashMap<String, String>();
+      callParameters.put("user", user);
+      callParameters.put("pass", token);
+      String s = callPrivacyIdeaAPI("/validate/check", "GET", false, callParameters);
   
+      JsonReader reader = Json.createReader(new StringReader(s));
+      JsonObject otp = reader.readObject();
+      if (checkAPISuccess(otp) == true) {
+        JsonObject result = otp.getJsonObject("result");
+        Boolean value = result.getBoolean("value", false);
+
+        if (logger.isDebugEnabled())
+          logger.debug("Validation value {}", value);
+
+        if (value == true) {
+          System.out.println("Token validated");
+          return true;
+        }
+      }
+
+    }  catch (Exception e) {
+      logger.debug("Faileds to validate token", e);
+      throw new piSessionException("Failed to validate token", e);
+    }
+    
+    return false;
+  }
+
   // Get a user's SMS token
   public String getSMSToken(String user) throws piSessionException {
     logger.debug("Trying to retrieve SMS token for {}", user);
