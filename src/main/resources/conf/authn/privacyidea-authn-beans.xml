@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright 2017 Michael Simon
+  Modifications from Jordan Dohms
   
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License.  You may obtain a copy
@@ -29,26 +30,26 @@
 	<bean class="net.shibboleth.idp.profile.impl.ProfileActionBeanPostProcessor" />
 	<bean class="net.shibboleth.ext.spring.config.IdentifiableBeanPostProcessor" />
 
-	<import resource="linotp-authn-config.xml" />
+	<import resource="privacyidea-authn-config.xml" />
 
-	<bean id="TokenGenerator" class="edu.kit.scc.linotp.TokenGenerator" scope="prototype"
+	<!-- <bean id="TokenGenerator" class="edu.kit.scc.linotp.TokenGenerator" scope="prototype"
 		p:httpServletRequest-ref="shibboleth.HttpServletRequest"
 		p:host="%{linotp.Host:localhost}"
 		p:serviceUsername="%{linotp.Serviceuser:admin}"
 		p:servicePassword="%{linotp.Servicepassword:secret}"
 		p:checkCert="%{linotp.Checkcert:true}"
-		p:createEmailToken="%{linotp.CreateEmailToken:false}" />
+		p:createEmailToken="%{linotp.CreateEmailToken:false}" /> -->
 
-	<bean id="ExtractTokenFromForm" class="edu.kit.scc.linotp.ExtractTokenFromForm" scope="prototype"
+	<bean id="ExtractTokenFromForm" class="ca.ab.concordia.privacyIDEAtfa.ExtractTokenFromForm" scope="prototype"
 		p:httpServletRequest-ref="shibboleth.HttpServletRequest" p:tokenCodeField-ref="shibboleth.authn.tokenCodeField" />
 
-	<bean id="LinotpTokenValidator" class="edu.kit.scc.linotp.TokenValidator" scope="prototype"
+	<bean id="privacyIdeaTokenValidator" class="ca.ab.concordia.privacyIDEAtfa.TokenValidator" scope="prototype"
 		p:httpServletRequest-ref="shibboleth.HttpServletRequest"
 		p:classifiedMessages-ref="shibboleth.authn.linotp.ClassifiedMessageMap"
-		p:host="%{linotp.Host:localhost}"
-		p:serviceUsername="%{linotp.Serviceuser:admin}"
-		p:servicePassword="%{linotp.Servicepassword:secret}"
-		p:checkCert="%{linotp.Checkcert:true}" />
+		p:host="%{pi.Host:localhost}"
+		p:serviceUsername="%{pi.Serviceuser:admin}"
+		p:servicePassword="%{pi.Servicepassword:secret}"
+		p:checkCert="%{pi.Checkcert:true}" />
 
     <bean id="SetRPUIInformation"
             class="net.shibboleth.idp.ui.impl.SetRPUIInformation" scope="prototype"
