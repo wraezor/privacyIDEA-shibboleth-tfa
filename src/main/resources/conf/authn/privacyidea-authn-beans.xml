@@ -16,40 +16,40 @@
   the License.
 -->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:p="http://www.springframework.org/schema/p" xmlns:c="http://www.springframework.org/schema/c"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        xmlns:util="http://www.springframework.org/schema/util" xmlns:p="http://www.springframework.org/schema/p" xmlns:c="http://www.springframework.org/schema/c"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 
-	default-init-method="initialize" default-destroy-method="destroy">
+        default-init-method="initialize" default-destroy-method="destroy">
 
-	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer" p:placeholderPrefix="%{"
-		p:placeholderSuffix="}" />
+        <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer" p:placeholderPrefix="%{"
+                p:placeholderSuffix="}" />
 
-	<bean class="net.shibboleth.idp.profile.impl.ProfileActionBeanPostProcessor" />
-	<bean class="net.shibboleth.ext.spring.config.IdentifiableBeanPostProcessor" />
+        <bean class="net.shibboleth.idp.profile.impl.ProfileActionBeanPostProcessor" />
+        <bean class="net.shibboleth.ext.spring.config.IdentifiableBeanPostProcessor" />
 
-	<import resource="privacyidea-authn-config.xml" />
+        <import resource="privacyidea-authn-config.xml" />
 
-	<!-- <bean id="TokenGenerator" class="edu.kit.scc.linotp.TokenGenerator" scope="prototype"
-		p:httpServletRequest-ref="shibboleth.HttpServletRequest"
-		p:host="%{linotp.Host:localhost}"
-		p:serviceUsername="%{linotp.Serviceuser:admin}"
-		p:servicePassword="%{linotp.Servicepassword:secret}"
-		p:checkCert="%{linotp.Checkcert:true}"
-		p:createEmailToken="%{linotp.CreateEmailToken:false}" /> -->
+        <bean id="TokenGenerator" class="ca.ab.concordia.privacyIDEAtfa.TokenGenerator" scope="prototype"
+                p:httpServletRequest-ref="shibboleth.HttpServletRequest"
+                p:host="%{pi.Host:localhost}"
+                p:serviceUsername="%{pi.Serviceuser:admin}"
+                p:servicePassword="%{pi.Servicepassword:secret}"
+                p:checkCert="%{pi.Checkcert:true}"
+                p:createEmailToken="%{pi.CreateEmailToken:false}" />
 
-	<bean id="ExtractTokenFromForm" class="ca.ab.concordia.privacyIDEAtfa.ExtractTokenFromForm" scope="prototype"
-		p:httpServletRequest-ref="shibboleth.HttpServletRequest" p:tokenCodeField-ref="shibboleth.authn.tokenCodeField" />
+        <bean id="ExtractTokenFromForm" class="ca.ab.concordia.privacyIDEAtfa.ExtractTokenFromForm" scope="prototype"
+                p:httpServletRequest-ref="shibboleth.HttpServletRequest" p:tokenCodeField-ref="shibboleth.authn.tokenCodeField" />
 
-	<bean id="privacyIdeaTokenValidator" class="ca.ab.concordia.privacyIDEAtfa.TokenValidator" scope="prototype"
-		p:httpServletRequest-ref="shibboleth.HttpServletRequest"
-		p:classifiedMessages-ref="shibboleth.authn.linotp.ClassifiedMessageMap"
-		p:host="%{pi.Host:localhost}"
-		p:serviceUsername="%{pi.Serviceuser:admin}"
-		p:servicePassword="%{pi.Servicepassword:secret}"
-		p:checkCert="%{pi.Checkcert:true}" />
+        <bean id="privacyIdeaTokenValidator" class="ca.ab.concordia.privacyIDEAtfa.TokenValidator" scope="prototype"
+                p:httpServletRequest-ref="shibboleth.HttpServletRequest"
+                p:classifiedMessages-ref="shibboleth.authn.privacyidea.ClassifiedMessageMap"
+                p:host="%{pi.Host:localhost}"
+                p:serviceUsername="%{pi.Serviceuser:admin}"
+                p:servicePassword="%{pi.Servicepassword:secret}"
+                p:checkCert="%{pi.Checkcert:true}" />
 
     <bean id="SetRPUIInformation"
             class="net.shibboleth.idp.ui.impl.SetRPUIInformation" scope="prototype"

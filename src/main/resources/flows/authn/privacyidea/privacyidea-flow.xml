@@ -21,10 +21,14 @@
 
   <var name="currentTime" class="java.util.Date" />
 
-  <view-state id="DisplayPrivacyIdeaPage" view="privacyidea">
-    <on-render>
+  <on-start>
       <evaluate expression="SetRPUIInformation" />
       <evaluate expression="TokenGenerator" />
+  </on-start>
+
+
+  <view-state id="DisplayPrivacyIdeaPage" view="privacyidea">
+    <on-render>
       <evaluate expression="environment" result="viewScope.environment"/>
       <evaluate expression="opensamlProfileRequestContext" result="viewScope.profileRequestContext" />
       <evaluate expression="opensamlProfileRequestContext.getSubcontext(T(net.shibboleth.idp.authn.context.AuthenticationContext))" result="viewScope.authenticationContext" />
@@ -37,28 +41,28 @@
     </on-render>
     <transition on="proceed" to="ExtractPrivacyIdeaFromForm"/>
   </view-state>
- 
+
   <action-state id="ExtractPrivacyIdeaFromForm">
     <evaluate expression="ExtractTokenFromForm" />
     <evaluate expression="'proceed'" />
-    
+
     <transition on="InvalidCredentials" to="DisplayPrivacyIdeaPage" />
     <transition on="proceed" to="ValidatePrivacyIdeaResponse" />
   </action-state>
- 
+
   <action-state id="ValidatePrivacyIdeaResponse">
     <evaluate expression="privacyIdeaTokenValidator"/>
     <evaluate expression="'proceed'"/>
-  
+
     <!-- At the moment user is redirected back to the totp form is he/she hasn't registered token -->
     <transition on="AccountError" to="DisplayPrivacyIdeaPage" />
 
-    <transition on="proceed" to="proceed"/>        
+    <transition on="proceed" to="proceed"/>
 
     <!-- On all errors, transition back to 2fa form -->
     <transition to="DisplayPrivacyIdeaPage" />
   </action-state>
-    
-	<bean-import resource="../../../conf/authn/privacyidea-authn-beans.xml" />
-    
+        
+        <bean-import resource="../../../conf/authn/privacyidea-authn-beans.xml" />
+
 </flow>
