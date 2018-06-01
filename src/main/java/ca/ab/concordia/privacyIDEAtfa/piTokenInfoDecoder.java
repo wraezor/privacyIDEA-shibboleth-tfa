@@ -48,7 +48,7 @@ public class piTokenInfoDecoder {
         Boolean status = result.getBoolean("status", false);
 	    
         if (logger.isDebugEnabled())
-	    	logger.debug("Session status {} and value {}", status);
+	    	logger.debug("Session status: {}", status);
 
     	List<piTokenInfo> tokenList = new ArrayList<piTokenInfo>();
 

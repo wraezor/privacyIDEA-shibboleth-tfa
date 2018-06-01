@@ -206,7 +206,7 @@ public class piConnection {
           logger.debug("Validation value {}", value);
 
         if (value == true) {
-          System.out.println("Token validated");
+          logger.debug("Token validated");
           return true;
         }
       }
@@ -284,9 +284,35 @@ public class piConnection {
   }
 
 
+
+  public List<piTokenInfo> getTokenList(String user) throws piSessionException {
+    logger.debug("Trying to retrieve all token for {}", user);
+    
+    CloseableHttpResponse response = null;
+      
+    try {
+      HashMap<String, String> callParameters = new HashMap<String, String>();
+      callParameters.put("user", user);
+      String s = callPrivacyIdeaAPI("/token", "GET", true, callParameters);
+
+      JsonReader reader = Json.createReader(new StringReader(s));
+      JsonObject otp = reader.readObject();
+        
+      List<piTokenInfo> tokenList  = tokenDecoder.decodeTokenList(otp);
+
+      return tokenList;
+    }  catch (Exception e) {
+      System.out.println(e.getMessage());
+      logger.debug("Failed to retrieve SMS token for user", e);
+      throw new piSessionException("Failed to retrieve SMS token for user", e);
+    }
+  }
+
+
+
   // Issue challenge for a specific SMS token
   public void issueSMSChallenge(String serial) throws piSessionException {
-    logger.debug("Issuing SMS challenge for token }", serial);
+    logger.debug("Issuing SMS challenge for token {}", serial);
     
     try {
       HashMap<String, String> callParameters = new HashMap<String, String>();

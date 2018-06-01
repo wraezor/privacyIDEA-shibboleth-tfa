@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-/*package ca.ab.concordia.privacyIDEAtfa;
+package ca.ab.concordia.privacyIDEAtfa;
+
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.security.auth.Subject;
@@ -84,31 +86,39 @@ public class TokenValidator extends AbstractValidationAction {
 	@Override
 	protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext,
 			@Nonnull final AuthenticationContext authenticationContext) {
-		logger.debug("{} Entering TokenValidator", getLogPrefix());		
+		logger.debug("{} Entering TokenValidator doExecute", getLogPrefix());		
 
 		TokenContext tokenCtx = authenticationContext.getSubcontext(TokenContext.class, true);
 
 		logger.debug("{} TokenValidator is called with token {} for user {}", getLogPrefix(), tokenCtx.getToken(), username);
 
 		try {
-			piConnection connection = new piConnection(host, checkCert);
-			boolean login = connection.validateToken(tokenCtx);
-			
-			if (login == true) {
-				buildAuthenticationResult(profileRequestContext, authenticationContext);
-				return;
-			}
-				
-			handleError(profileRequestContext, authenticationContext, "TokenWrong",
-						AuthnEventIds.INVALID_CREDENTIALS);
-	
-		}		
-		catch (Exception e) {
-			logger.warn("{} Exception while validating token: {}", getLogPrefix(), e.getMessage());
-			handleError(profileRequestContext, authenticationContext, e,
-					AuthnEventIds.AUTHN_EXCEPTION);
-		}
-	}
+      piConnection connection = new piConnection(host, checkCert);
+      connection.authenticateConnection(serviceUsername, servicePassword);
+      
+      List<piTokenInfo> tokenList = connection.getTokenList(username);
+
+      for (piTokenInfo token : tokenList) {
+        logger.debug("Token: {} / Type: {}", token.getSerial(), token.getTokenType());
+        boolean login = connection.validateTokenBySerial(token.getSerial(), tokenCtx.getToken());
+        
+        if (login == true) {
+          buildAuthenticationResult(profileRequestContext, authenticationContext);
+          return;
+        }
+      }
+        
+      handleError(profileRequestContext, authenticationContext, "TokenWrong",
+            AuthnEventIds.INVALID_CREDENTIALS);
+
+    }		
+    catch (Exception e) { 
+      logger.warn("{} Exception while validating token: {}", getLogPrefix(), e.getMessage());
+      handleError(profileRequestContext, authenticationContext, e,
+          AuthnEventIds.AUTHN_EXCEPTION);
+    }
+  }
+
 	
 	public void setHost(@Nonnull @NotEmpty final String fieldName) {
 		logger.debug("{} {} is tokencode field from the form", getLogPrefix(), fieldName);
@@ -123,7 +133,7 @@ public class TokenValidator extends AbstractValidationAction {
 	}
 
 	public void setServicePassword(@Nonnull @NotEmpty final String fieldName) {
-		logger.debug("{} {} is tokencode field from the form", getLogPrefix(), fieldName);
+		//~ logger.debug("{} {} is tokencode field from the form", getLogPrefix(), fieldName);
 		ComponentSupport.ifInitializedThrowUnmodifiabledComponentException(this);
 		servicePassword = fieldName;
 	}
@@ -134,4 +144,3 @@ public class TokenValidator extends AbstractValidationAction {
 	}
 
 }
-*/

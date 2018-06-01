@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-/*package ca.ab.concordia.privacyIDEAtfa;
+package ca.ab.concordia.privacyIDEAtfa;
 
 import java.util.List;
 
@@ -95,30 +95,51 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 
     @Override
 	protected void doExecute(@Nonnull final ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext) {
-    	logger.debug("Entering GenerateNewToken doExecute");
+    logger.debug("Entering GenerateNewToken doExecute");
 			
-		try {
-			piConnection connection = new piConnection(host, checkCert);
-			//connection.requestAdminSession();
-			List<piTokenInfo> tokenList = connection.getTokenInfoList(username);
-			
-			if (createEmailToken && tokenList.size() == 0) {
-				List<piUser> userList = connection.getUserList("userid", username);
-				if (userList.size() == 1) {
-					connection.initEmailToken(username, userList.get(0).getEmail());
-					tokenList = connection.getTokenInfoList(username);
-				}
-			}
-			
+    try {
+      piConnection connection = new piConnection(host, checkCert);
+      connection.authenticateConnection(serviceUsername, servicePassword);
+      
+      List<piTokenInfo> tokenList = connection.getTokenList(username);
+
+      for (piTokenInfo token : tokenList) {
+        //logger.debug("Token: {} / Type: {}", token.getSerial(), token.getTokenType());
+        
+        if (token.getTokenType().equals("sms")) {
+          connection.issueSMSChallenge(token.getSerial());
+          logger.debug("Generated SMS challenge for token: {}", token.getSerial());
+        }
+      }
+
 			tokenCtx.setTokenList(tokenList);
-			
-			//connection.generateToken(tokenCtx);
 			
 		} catch (Exception e) {
 			logger.debug("Failed to create new token", e);
 		}
 		
 	}
+  
+  public boolean tokenExistsForUser(String username) {
+    logger.debug("Checking if user has one or more tokens");
+    try {
+      piConnection connection = new piConnection(host, checkCert);
+      connection.authenticateConnection(serviceUsername, servicePassword);
+      
+      List<piTokenInfo> tokenList = connection.getTokenList(username);
+
+      if ( tokenList != null && tokenList.isEmpty() == false && tokenList.size() > 0 ) {
+        return true;
+      }
+
+		} catch (Exception e) {
+			logger.debug("Failed to check for tokens", e);
+		}
+    return false;
+
+  }
+  
+  
 
 	public void setHost(@Nonnull @NotEmpty final String fieldName) {
 		ComponentSupport.ifInitializedThrowUnmodifiabledComponentException(this);
@@ -146,4 +167,3 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 	}
 
 }
-*/
