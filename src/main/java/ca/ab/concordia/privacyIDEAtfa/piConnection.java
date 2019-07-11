@@ -293,7 +293,7 @@ public class piConnection {
     try {
       HashMap<String, String> callParameters = new HashMap<String, String>();
       callParameters.put("user", user);
-      String s = callPrivacyIdeaAPI("/token", "GET", true, callParameters);
+      String s = callPrivacyIdeaAPI("/token/", "GET", true, callParameters);
 
       JsonReader reader = Json.createReader(new StringReader(s));
       JsonObject otp = reader.readObject();
@@ -303,8 +303,8 @@ public class piConnection {
       return tokenList;
     }  catch (Exception e) {
       System.out.println(e.getMessage());
-      logger.debug("Failed to retrieve SMS token for user", e);
-      throw new piSessionException("Failed to retrieve SMS token for user", e);
+      logger.debug("Failed to retrieve any token for user", e);
+      throw new piSessionException("Failed to retrieve any token for user", e);
     }
   }
 
