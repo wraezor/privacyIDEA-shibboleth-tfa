@@ -260,7 +260,7 @@ public class piConnection {
     try {
       HashMap<String, String> callParameters = new HashMap<String, String>();
       callParameters.put("user", user);
-      String s = callPrivacyIdeaAPI("/token", "GET", true, callParameters);
+      String s = callPrivacyIdeaAPI("/token/", "GET", true, callParameters);
 
       JsonReader reader = Json.createReader(new StringReader(s));
       JsonObject otp = reader.readObject();
@@ -293,7 +293,7 @@ public class piConnection {
     try {
       HashMap<String, String> callParameters = new HashMap<String, String>();
       callParameters.put("user", user);
-      String s = callPrivacyIdeaAPI("/token", "GET", true, callParameters);
+      String s = callPrivacyIdeaAPI("/token/", "GET", true, callParameters);
 
       JsonReader reader = Json.createReader(new StringReader(s));
       JsonObject otp = reader.readObject();
