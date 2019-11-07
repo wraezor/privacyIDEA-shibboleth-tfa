@@ -109,7 +109,10 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
         if (token.getTokenType().equals("sms")) {
           connection.issueSMSChallenge(token.getSerial());
           logger.debug("Generated SMS challenge for token: {}", token.getSerial());
-        }
+        } else if (token.getTokenType().equals("email")) {
+          connection.issueEmailChallenge(token.getSerial());
+          logger.debug("Generated EMail challenge for token: {}"m token.getSerial());
+        } 
       }
 
 			tokenCtx.setTokenList(tokenList);
