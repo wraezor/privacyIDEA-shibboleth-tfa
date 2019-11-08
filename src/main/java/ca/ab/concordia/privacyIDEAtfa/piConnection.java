@@ -372,8 +372,6 @@ public class piConnection {
       callParameters.put("serial", serial);
       String s = callPrivacyIdeaAPI("/validate/triggerchallenge", "GET", true, callParameters);
 
-      //System.out.println(s);
-
       JsonReader reader = Json.createReader(new StringReader(s));
       JsonObject otp = reader.readObject();
       if (checkAPISuccess(otp) == false) {
