@@ -27,13 +27,12 @@ import net.shibboleth.utilities.java.support.primitive.StringSupport;
 
 import org.opensaml.profile.action.ActionSupport;
 import org.opensaml.profile.context.ProfileRequestContext;
-import org.opensaml.saml.common.SAMLObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 
-public class ExtractTokenFromForm extends AbstractExtractionAction<SAMLObject, SAMLObject> {
+public class ExtractTokenFromForm extends AbstractExtractionAction {
 	
 	/** Class logger. */
 	@Nonnull
@@ -55,7 +54,7 @@ public class ExtractTokenFromForm extends AbstractExtractionAction<SAMLObject, S
 
 
 	@Override
-	protected void doExecute(@Nonnull final ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext,
+	protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext,
 			@Nonnull final AuthenticationContext authenticationContext) {
 		
 		final HttpServletRequest request = getHttpServletRequest();
