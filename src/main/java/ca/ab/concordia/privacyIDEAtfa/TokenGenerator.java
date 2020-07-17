@@ -58,7 +58,7 @@ public class TokenGenerator extends AbstractProfileAction {
     }
     
 	@Override
-	protected boolean doPreExecute(ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext) {
+        protected boolean doPreExecute(ProfileRequestContext profileRequestContext) {
 		logger.debug("Entering GenerateNewToken doPreExecute");
 
         if (!super.doPreExecute(profileRequestContext)) {
