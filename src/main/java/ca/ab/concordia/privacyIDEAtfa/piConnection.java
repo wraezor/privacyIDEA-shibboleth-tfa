@@ -283,7 +283,36 @@ public class piConnection {
     return foundSerial;
   }
 
+  // Get a user's email token
+  public String getEmailToken(String user) throws piSessionException {
+    logger.debug("Trying to retrieve email token for {}", user);
+    String foundSerial = "000000000000";
+    
+    try {
+      HashMap<String, String> callParameters = new HashMap<String, String>();
+      callParameters.put("user", user);
+      String s = callPrivacyIdeaAPI("/token", "GET", true, callParameters);
 
+      JsonReader reader = Json.createReader(new StringReader(s));
+      JsonObject otp = reader.readObject();
+
+      if (checkAPISuccess(otp) == true) {
+        List<piTokenInfo> tokenList = tokenDecoder.decodeTokenList(otp);
+
+        for (piTokenInfo token : tokenList) {
+          if (token.getTokenType().equals("email")) {
+            foundSerial = token.getSerial(); 
+          }
+        }
+      }
+
+    }  catch (Exception e) {
+      System.out.println(e.getMessage());
+      logger.debug("Failed to retrieve email token for user", e);
+      throw new piSessionException("Failed to retrieve email token for user", e);
+    }
+    return foundSerial;
+  }
 
   public List<piTokenInfo> getTokenList(String user) throws piSessionException {
     logger.debug("Trying to retrieve all token for {}", user);
@@ -303,8 +332,8 @@ public class piConnection {
       return tokenList;
     }  catch (Exception e) {
       System.out.println(e.getMessage());
-      logger.debug("Failed to retrieve SMS token for user", e);
-      throw new piSessionException("Failed to retrieve SMS token for user", e);
+      logger.debug("Failed to retrieve any token for user", e);
+      throw new piSessionException("Failed to retrieve any token for user", e);
     }
   }
 
@@ -333,6 +362,28 @@ public class piConnection {
     }
     
   }
+
+  // Issue challenge for a specific E-Mail token
+  public void issueEmailChallenge(String serial) throws piSessionException {
+    logger.debug("Issuing Email challenge for token {}", serial);
+
+    try {
+      HashMap<String, String> callParameters = new HashMap<String, String>();
+      callParameters.put("serial", serial);
+      String s = callPrivacyIdeaAPI("/validate/triggerchallenge", "GET", true, callParameters);
+
+      JsonReader reader = Json.createReader(new StringReader(s));
+      JsonObject otp = reader.readObject();
+      if (checkAPISuccess(otp) == false) {
+        System.out.println("Unable to issue Email challenge");
+        logger.debug("{} No details, probably no challenge/response");
+      }
+    }  catch (Exception e) {
+      logger.debug("Failed to generate Email challenge", e);
+      throw new piSessionException("Failed to generate Email challenge", e);
+    }
+
+  } 
 
 
   private CloseableHttpClient getHttpClient(Boolean checkCert) throws piSessionException {

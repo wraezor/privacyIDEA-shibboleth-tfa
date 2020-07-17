@@ -18,12 +18,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.kit.scc</groupId>
 	<artifactId>shib-2fa</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.2.2</version>
 	<parent>
 		<groupId>net.shibboleth.idp</groupId>
 		<artifactId>idp-parent</artifactId>
-		<version>3.3.0</version>
+		<version>4.0.1</version>
+                <relativePath></relativePath>
 	</parent>
+
+        <properties>
+		<package-name>ca.ab.concordia.privacyIDEAtfa</package-name>
+		<automatic-module-name>ca.ab.concordia.privacyIDEAtfa</automatic-module-name>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -41,13 +47,18 @@
 			<artifactId>idp-authn-impl</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+                <dependency>
+			<groupId>javax.json</groupId>
+			<artifactId>javax.json-api</artifactId>
+			<version>1.1.4</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
 		<repository>
 			<id>central</id>
 			<name>Maven Plugin Repository</name>
-			<url>http://central.maven.org/maven2</url>
+			<url>https://repo1.maven.org/maven2</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -66,4 +77,20 @@
 			</releases>
 		</repository>
 	</repositories>
+
+        <build>
+		<defaultGoal>package</defaultGoal>
+			<plugins>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<configuration>
+						<archive>
+							<manifestEntries>	
+								<Automatic-Module-Name>ca.ab.concordia.privacyIDEAtfa</Automatic-Module-Name>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+			</plugins>
+	</build>
 </project>

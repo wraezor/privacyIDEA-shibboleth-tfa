@@ -40,7 +40,7 @@ public class TokenValidator extends AbstractValidationAction {
 
 	private final Logger logger = LoggerFactory.getLogger(TokenValidator.class);
 
-	private Function<ProfileRequestContext,String> usernameLookupStrategy;
+        private CanonicalUsernameLookupStrategy usernameLookupStrategy;
 	private String username;
 	
 	private String host;

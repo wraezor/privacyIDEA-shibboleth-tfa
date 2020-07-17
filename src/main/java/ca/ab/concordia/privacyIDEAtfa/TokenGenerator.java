@@ -30,17 +30,16 @@ import net.shibboleth.utilities.java.support.component.ComponentSupport;
 
 import com.google.common.base.Function;
 import org.opensaml.profile.context.ProfileRequestContext;
-import org.opensaml.saml.common.SAMLObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject> {
+public class TokenGenerator extends AbstractProfileAction {
 
 	private final Logger logger = LoggerFactory.getLogger(TokenGenerator.class);
 
 	protected TokenContext tokenCtx;
 	
-	private Function<ProfileRequestContext,String> usernameLookupStrategy;
+        private CanonicalUsernameLookupStrategy usernameLookupStrategy;
 	protected String username;
 
 	private String host;
@@ -59,7 +58,7 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
     }
     
 	@Override
-	protected boolean doPreExecute(ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext) {
+        protected boolean doPreExecute(ProfileRequestContext profileRequestContext) {
 		logger.debug("Entering GenerateNewToken doPreExecute");
 
         if (!super.doPreExecute(profileRequestContext)) {
@@ -94,7 +93,7 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 	}	
 
     @Override
-	protected void doExecute(@Nonnull final ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext) {
+      protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext) {
     logger.debug("Entering GenerateNewToken doExecute");
 			
     try {
@@ -109,7 +108,10 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
         if (token.getTokenType().equals("sms")) {
           connection.issueSMSChallenge(token.getSerial());
           logger.debug("Generated SMS challenge for token: {}", token.getSerial());
-        }
+        } else if (token.getTokenType().equals("email")) {
+          connection.issueEmailChallenge(token.getSerial());
+          logger.debug("Generated EMail challenge for token: {}", token.getSerial());
+        } 
       }
 
 			tokenCtx.setTokenList(tokenList);
